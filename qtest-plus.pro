@@ -6,6 +6,8 @@
 
 QT       -= gui
 
+QT += testlib
+
 TARGET = qtest-plus
 TEMPLATE = lib
 
