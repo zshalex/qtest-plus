@@ -9,8 +9,18 @@ QT       -= gui
 TARGET = qtest-plus
 TEMPLATE = lib
 
+DESTDIR = build
+OBJECTS_DIR = build
+MOC_DIR = build
+
+VERSION = 0.0.1
+
 DEFINES += QTESTPLUS_LIBRARY
 
-SOURCES +=
+SOURCES += \
+    testsuite.cpp \
+    testcase.cpp
 
-HEADERS += qtest-plus_global.h
+HEADERS += qtest-plus_global.h \
+    testsuite.h \
+    testcase.h

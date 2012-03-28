@@ -13,3 +13,4 @@ qrc_*.cpp
 *.bak
 *debug*
 *release*
+*.dylib
