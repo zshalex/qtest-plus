@@ -1,0 +1,12 @@
+#ifndef QTESTPLUS_GLOBAL_H
+#define QTESTPLUS_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(QTESTPLUS_LIBRARY)
+#  define QTESTPLUSSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define QTESTPLUSSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QTESTPLUS_GLOBAL_H

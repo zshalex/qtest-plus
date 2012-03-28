@@ -1,0 +1,15 @@
+*.pro.user
+Thumbs.db
+*.o
+moc_*.cpp
+*.log
+*.Debug
+*.Release
+Makefile
+ui_*.h
+qrc_*.cpp
+*.moc
+*build-desktop
+*.bak
+*debug*
+*release*
