@@ -6,10 +6,10 @@
 #include "qtest-plus_global.h"
 
 #define DECLARE_TEST_CASE(type) \
-    static type tc;
+    static type tc
 
 #define INIT_TEST_CASE(type, name) \
-    type type::tc(name);
+    type type::tc(name)
 
 #define CREATE_TEST_CASE(type) \
     type(const QString &name):TestCase(name) {}
