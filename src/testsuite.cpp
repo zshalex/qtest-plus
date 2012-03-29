@@ -5,6 +5,8 @@
 
 #include "testsuite.h"
 
+namespace ZSHALEX_QTEST_PLUS {
+
 TestSuite TestSuite::m_suite;
 
 const char* TestSuite::optString = "e:i:";
@@ -139,4 +141,6 @@ void TestSuite::loadArg(int argc, char **argv)
         }
         opt = getopt_long( argc, argv, optString, longOpts, &longIndex);
     }
+}
+
 }
