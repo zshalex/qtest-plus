@@ -11,7 +11,7 @@ QT += testlib
 TARGET = qtest-plus
 TEMPLATE = lib
 
-DESTDIR = build
+DESTDIR = lib
 OBJECTS_DIR = build
 MOC_DIR = build
 
