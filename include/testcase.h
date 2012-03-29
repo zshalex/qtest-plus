@@ -6,13 +6,11 @@
 #include "qtest-plus_global.h"
 
 #define DECLARE_TEST_CASE(type) \
+    type(const QString &name):TestCase(name) {} \
     static type tc
 
 #define INIT_TEST_CASE(type, name) \
     type type::tc(name)
-
-#define CREATE_TEST_CASE(type) \
-    type(const QString &name):TestCase(name) {}
 
 class QTESTPLUSSHARED_EXPORT TestCase : public QObject
 {

@@ -13,12 +13,13 @@ class QTESTPLUSSHARED_EXPORT TestSuite : public QObject
     Q_OBJECT
 public:
     static TestSuite * instance();
+    ~TestSuite();
 
     explicit TestSuite(QObject *parent = 0);
 
     void addTestCase(TestCase *testCase);
 
-    bool execute(int argc, char** argv);
+    int execute(int argc, char** argv);
 
     inline int totalCount(){return m_totleCount;}
     inline int errorCount(){return m_errorCount;}

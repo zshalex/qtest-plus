@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT -= gui
 
 QT += testlib
 
@@ -15,14 +15,16 @@ DESTDIR = build
 OBJECTS_DIR = build
 MOC_DIR = build
 
-VERSION = 0.0.1
+VERSION = 0.1.0
+
+INCLUDEPATH += include
 
 DEFINES += QTESTPLUS_LIBRARY
 
 SOURCES += \
-    testsuite.cpp \
-    testcase.cpp
+    src/testsuite.cpp \
+    src/testcase.cpp
 
-HEADERS += qtest-plus_global.h \
-    testsuite.h \
-    testcase.h
+HEADERS += include/qtest-plus_global.h \
+    include/testsuite.h \
+    include/testcase.h

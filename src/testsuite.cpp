@@ -1,6 +1,7 @@
 #include <QtTest/QtTest>
 #include <getopt.h>
 #include <iostream>
+#include <QDebug>
 
 #include "testsuite.h"
 
@@ -23,6 +24,17 @@ TestSuite::TestSuite(QObject *parent) :
 {
 }
 
+TestSuite::~TestSuite() {
+    QMap<QString, TestCase*>::iterator i = m_cases.begin();
+    TestCase *obj = NULL;
+    while (i != m_cases.end()) {
+        obj = *i;
+        if (obj != NULL)
+            delete obj;
+        i++;
+    }
+}
+
 TestSuite * TestSuite::instance()
 {
     return &m_suite;
@@ -33,9 +45,8 @@ void TestSuite::addTestCase(TestCase *testCase)
     m_cases.insert(testCase->name(),testCase);
 }
 
-bool TestSuite::execute(int argc, char **argv)
+int TestSuite::execute(int argc, char **argv)
 {
-    QString testName;
     QObject *obj;
     int result;
     loadArg(argc,argv);
@@ -46,6 +57,18 @@ bool TestSuite::execute(int argc, char **argv)
     m_successCount = 0;
     m_errorTest.clear();
 
+    printf("Include test case:");
+    foreach(QString include, m_includeTest) {
+        printf(" %s",include.toAscii().data());
+    }
+    printf(".\n");
+
+    printf("Exclude test case:");
+    foreach(QString exclude, m_excludeTest) {
+        printf(" %s",exclude.toAscii().data());
+    }
+    printf(".\n");
+
     if (m_includeTest.count() > 0)
         m_runTest = m_includeTest;
     else
@@ -54,6 +77,12 @@ bool TestSuite::execute(int argc, char **argv)
     for (int i = 0; i < m_excludeTest.count(); i++) {
         m_runTest.removeAll(m_excludeTest.at(i));
     }
+
+    printf("Run test case:");
+    foreach(QString run, m_runTest) {
+        printf(" %s", run.toAscii().data());
+    }
+    printf(".\n");
 
     for (int i = 0; i < m_runTest.count(); i++) {
         obj = m_cases.value(m_runTest.at(i));
@@ -74,8 +103,13 @@ bool TestSuite::execute(int argc, char **argv)
         }
     }
     printf("Total: Success %d, Fail %d, Skip %d.\n",m_successCount,m_errorTest.count(),m_totleCount - m_successCount - m_errorTest.count());
-    for (int i = 0; i < m_errorTest.count(); i++) {
-        printf("Error Test Case %s. \n", m_errorTest.at(i).toAscii().data());
+
+    if (m_errorTest.count() > 0) {
+        printf("Error test case:");
+        for (int i = 0; i < m_errorTest.count(); i++) {
+            printf(" %s", m_errorTest.at(i).toAscii().data());
+        }
+        printf(".\n");
     }
     return m_errorTest.count() > 0 ? -1 : 0;
 }
