@@ -5,8 +5,6 @@
 
 #include "testsuite.h"
 
-namespace ZSHALEX_QTEST_PLUS {
-
 TestSuite TestSuite::m_suite;
 
 const char* TestSuite::optString = "e:i:";
@@ -49,46 +47,14 @@ void TestSuite::addTestCase(TestCase *testCase)
 
 int TestSuite::execute(int argc, char **argv)
 {
-    QObject *obj;
+    TestCase *obj;
     int result;
     loadArg(argc,argv);
-
-    m_totleCount = m_cases.count();
-    m_runCount = 0;
-    m_errorCount = 0;
-    m_successCount = 0;
-    m_errorTest.clear();
-
-    printf("Include test case:");
-    foreach(QString include, m_includeTest) {
-        printf(" %s",include.toAscii().data());
-    }
-    printf(".\n");
-
-    printf("Exclude test case:");
-    foreach(QString exclude, m_excludeTest) {
-        printf(" %s",exclude.toAscii().data());
-    }
-    printf(".\n");
-
-    if (m_includeTest.count() > 0)
-        m_runTest = m_includeTest;
-    else
-        m_runTest = m_cases.keys();
-
-    for (int i = 0; i < m_excludeTest.count(); i++) {
-        m_runTest.removeAll(m_excludeTest.at(i));
-    }
-
-    printf("Run test case:");
-    foreach(QString run, m_runTest) {
-        printf(" %s", run.toAscii().data());
-    }
-    printf(".\n");
-
+    filterTestCase();
     for (int i = 0; i < m_runTest.count(); i++) {
         obj = m_cases.value(m_runTest.at(i));
         if (obj) {
+            analyseTestCase(obj);
             m_runCount++;
             try
             {
@@ -143,4 +109,44 @@ void TestSuite::loadArg(int argc, char **argv)
     }
 }
 
+void TestSuite::filterTestCase()
+{
+    printf("Include test case:");
+    foreach(QString include, m_includeTest) {
+        printf(" %s",include.toAscii().data());
+    }
+    printf(".\n");
+
+    printf("Exclude test case:");
+    foreach(QString exclude, m_excludeTest) {
+        printf(" %s",exclude.toAscii().data());
+    }
+    printf(".\n");
+
+    if (m_includeTest.count() > 0)
+        m_runTest = m_includeTest;
+    else
+        m_runTest = m_cases.keys();
+
+    for (int i = 0; i < m_excludeTest.count(); i++) {
+        m_runTest.removeAll(m_excludeTest.at(i));
+    }
+
+    printf("Run test case:");
+    foreach(QString run, m_runTest) {
+        printf(" %s", run.toAscii().data());
+    }
+    printf(".\n");
+}
+
+void TestSuite::analyseTestCase(TestCase *obj)
+{
+    QMetaMethod method;
+    for(int i = 0; i < obj->metaObject()->methodCount(); i++) {
+        method = obj->metaObject()->method(i);
+        if (method.access() == QMetaMethod::Private &&
+                method.methodType() == QMetaMethod::Slot &&
+                method.parameterTypes().isEmpty())
+            obj->addMethod(method.signature());
+    }
 }

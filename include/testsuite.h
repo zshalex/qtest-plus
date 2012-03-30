@@ -16,8 +16,6 @@
 #include "testcase.h"
 #include "qtest-plus_global.h"
 
-namespace ZSHALEX_QTEST_PLUS {
-
 /** @class TestSuite
 *  单元测试套件.用于保存所有注册的单元测试,并控制单元测试的执行.
 */
@@ -68,6 +66,8 @@ public:
     inline int runCount(){return m_runCount;}
 private:
     void loadArg(int argc, char** argv);
+    void filterTestCase();
+    void analyseTestCase(TestCase *obj);
 private:
     static TestSuite m_suite;
     static const char *optString;
@@ -83,8 +83,6 @@ private:
     QStringList m_excludeTest;
     QStringList m_runTest;
 };
-
-}
 
 /**
   @}

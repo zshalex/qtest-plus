@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT -= gui
-
-QT += testlib
+QT += core testlib
 
 TARGET = qtest-plus
 TEMPLATE = lib

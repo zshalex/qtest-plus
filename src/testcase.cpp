@@ -1,7 +1,8 @@
+#include <QDebug>
+#include <QMetaMethod>
+
 #include "testcase.h"
 #include "testsuite.h"
-
-namespace ZSHALEX_QTEST_PLUS {
 
 TestCase::TestCase(const QString &name) :
     QObject(NULL),
@@ -10,4 +11,17 @@ TestCase::TestCase(const QString &name) :
     TestSuite::instance()->addTestCase(this);
 }
 
+void TestCase::addMethod(QString name)
+{
+    m_methods.append(name);
+}
+
+int TestCase::methodCount()
+{
+    return m_methods.count();
+}
+
+QString TestCase::method(int index)
+{
+    return m_methods.at(index);
 }

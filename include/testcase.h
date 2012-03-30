@@ -18,8 +18,6 @@
 
 #include "qtest-plus_global.h"
 
-namespace ZSHALEX_QTEST_PLUS {
-
 /**
 *  @name 宏定义
 *  @{
@@ -61,11 +59,14 @@ public:
     *  @return 单元测试的名称.
     */
     inline QString name() {return m_name;}
-protected:
-    QString m_name;
-};
 
-}
+    void addMethod(QString name);
+    int methodCount();
+    QString method(int index);
+private:
+    QString m_name;
+    QStringList m_methods;
+};
 
 #endif // TESTCASE_H
 /**
