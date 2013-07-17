@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QMetaMethod>
 
 #include "testcase.h"

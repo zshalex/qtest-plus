@@ -1,19 +1,21 @@
 #include <QtTest/QtTest>
-#include <getopt.h>
 #include <iostream>
-#include <QDebug>
 
 #include "testsuite.h"
 
-TestSuite TestSuite::m_suite;
-
-const char* TestSuite::optString = "e:i:";
+#ifdef HAVE_GET_OPT
+#include <getopt.h>
 
 const struct option TestSuite::longOpts[] = {
     { "exclude", required_argument, NULL, 'e' },
     { "include", required_argument, NULL, 'i'},
     { NULL, no_argument, NULL, 0 }
 };
+
+const char* TestSuite::optString = "e:i:";
+#endif
+
+TestSuite TestSuite::m_suite;
 
 TestSuite::TestSuite(QObject *parent) :
     QObject(parent),
@@ -24,15 +26,8 @@ TestSuite::TestSuite(QObject *parent) :
 {
 }
 
-TestSuite::~TestSuite() {
-    QMap<QString, TestCase*>::iterator i = m_cases.begin();
-    TestCase *obj = NULL;
-    while (i != m_cases.end()) {
-        obj = *i;
-        if (obj != NULL)
-            delete obj;
-        i++;
-    }
+TestSuite::~TestSuite()
+{
 }
 
 TestSuite * TestSuite::instance()
@@ -70,25 +65,25 @@ int TestSuite::execute(int argc, char **argv)
             }
         }
     }
-    printf("Total: Success %d, Fail %d, Skip %d.\n",m_successCount,m_errorTest.count(),m_totleCount - m_successCount - m_errorTest.count());
+    printf("Total: Success %d, Fail %d, Skip %d.\n",m_successCount,m_errorTest.count(),m_cases.count() - m_successCount - m_errorTest.count());
 
     if (m_errorTest.count() > 0) {
         printf("Error test case:");
         for (int i = 0; i < m_errorTest.count(); i++) {
-            printf(" %s", m_errorTest.at(i).toAscii().data());
+            printf(" %s", m_errorTest.at(i).toLocal8Bit().data());
         }
         printf(".\n");
     }
-    return m_errorTest.count() > 0 ? -1 : 0;
+    return m_errorTest.count() > 0 ? m_errorTest.count() : 0;
 }
 
 void TestSuite::loadArg(int argc, char **argv)
 {
+#ifdef HAVE_GET_OPT
     int longIndex;
     QString context;
     m_includeTest.clear();
     m_excludeTest.clear();
-
     int opt = getopt_long( argc, argv, optString, longOpts, &longIndex );
     while( opt != -1 ) {
         switch( opt ) {
@@ -107,19 +102,20 @@ void TestSuite::loadArg(int argc, char **argv)
         }
         opt = getopt_long( argc, argv, optString, longOpts, &longIndex);
     }
+#endif
 }
 
 void TestSuite::filterTestCase()
 {
     printf("Include test case:");
     foreach(QString include, m_includeTest) {
-        printf(" %s",include.toAscii().data());
+        printf(" %s",include.toLocal8Bit().data());
     }
     printf(".\n");
 
     printf("Exclude test case:");
     foreach(QString exclude, m_excludeTest) {
-        printf(" %s",exclude.toAscii().data());
+        printf(" %s",exclude.toLocal8Bit().data());
     }
     printf(".\n");
 
@@ -134,7 +130,7 @@ void TestSuite::filterTestCase()
 
     printf("Run test case:");
     foreach(QString run, m_runTest) {
-        printf(" %s", run.toAscii().data());
+        printf(" %s", run.toLocal8Bit().data());
     }
     printf(".\n");
 }
@@ -147,6 +143,6 @@ void TestSuite::analyseTestCase(TestCase *obj)
         if (method.access() == QMetaMethod::Private &&
                 method.methodType() == QMetaMethod::Slot &&
                 method.parameterTypes().isEmpty())
-            obj->addMethod(method.signature());
+            obj->addMethod(method.name());
     }
 }

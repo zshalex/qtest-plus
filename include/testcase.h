@@ -24,17 +24,25 @@
 */
 
 /** @def DECLARE_TEST_CASE(type)
-*  声明一个单元测试类的静态变量,并添加一个构造函数.
-*/
+	*  声明一个单元测试类的静态变量,并添加一个构造函数.
+	*/
 #define DECLARE_TEST_CASE(type) \
-    type(const QString &name):TestCase(name) {} \
-    static type tc
+	type(const QString &name):TestCase(name) {} \
+	static type tc
 
 /** @def INIT_TEST_CASE(type, name)
-*  初始化单元测试的静态变量.
-*/
+	*  初始化单元测试的静态变量.
+	*/
 #define INIT_TEST_CASE(type, name) \
-    type type::tc(name)
+	type type::tc(name)
+
+//laoly
+/*-----------------------
+  创建一个单元测试类
+*/
+#define CREATE_TEST_CASE(type,name)\
+	type tc(name)
+
 
 /**
   @}

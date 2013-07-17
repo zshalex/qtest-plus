@@ -15,6 +15,11 @@ MOC_DIR = build
 
 VERSION = 0.1.0
 
+win32-g++
+    DEFINES += HAVE_GET_OPT
+linux-g++
+    DEFINES += HAVE_GET_OPT
+
 INCLUDEPATH += include
 
 DEFINES += QTESTPLUS_LIBRARY
